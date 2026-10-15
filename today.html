@@ -105,7 +105,7 @@
         {label:'体脂肪率',value:display(daily.bodyFat),unit:'%'},
         {label:'血圧',value:blood,unit:'mmHg'},
         {label:'歩数',value:display(daily.steps),unit:'歩'},
-        {label:'記録',value:daily.url?'Notionで開く':'未作成',kind:'link',url:safeNotionUrl(daily.url)},
+        {label:'記録',value:daily.url?'Notionで開く':state.daily?'同期済み':'未作成',kind:'link',url:safeNotionUrl(daily.url)},
       ];
       const root=$('#metrics');root.replaceChildren();
       items.forEach(item=>{
