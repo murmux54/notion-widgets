@@ -1,4 +1,4 @@
-<!doctype html>
+function rememberKey(token,persistent){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);(persistent?localStorage:sessionStorage).setItem(TOKEN_KEY,token);state.token=token}<!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8">
