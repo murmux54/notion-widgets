@@ -1,4 +1,4 @@
-function rememberKey(token,persistent){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);(persistent?localStorage:sessionStorage).setItem(TOKEN_KEY,token);state.token=token}<!doctype html>
+<!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8">
@@ -77,7 +77,7 @@ function rememberKey(token,persistent){localStorage.removeItem(TOKEN_KEY);sessio
     function hideError(){$('#error').style.display='none'}
     function handleError(error){setBusy(false);if(error&&error.code==='UNAUTHORIZED'){forgetKey();openAuth(error.message)}else{showError(error)}}
     function savedKey(){return localStorage.getItem(TOKEN_KEY)||sessionStorage.getItem(TOKEN_KEY)||''}
-    function rememberKey(token,persistent){forgetKey();(persistent?localStorage:sessionStorage).setItem(TOKEN_KEY,token)}
+    function rememberKey(token,persistent){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);(persistent?localStorage:sessionStorage).setItem(TOKEN_KEY,token);state.token=token}
     function forgetKey(){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);state.token=''}
 
     function openAuth(message=''){$('#app').hidden=true;$('#authGate').classList.add('open');$('#authError').textContent=message;$('#accessKey').value='';setTimeout(()=>$('#accessKey').focus(),0)}
