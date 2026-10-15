@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Today</title>
+  <style>
+    :root{--bg:#191919;--panel:#202020;--panel2:#252525;--text:#dfdedb;--sub:#9b9a97;--faint:#6f6e6b;--line:#323232;--accent:#e8e7e4;--danger:#d95550;--sat:#5a9bd5;--radius:10px}
+    *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;font-size:13px}button,input,select{font:inherit}button{cursor:pointer}.shell{padding:12px 14px 18px;max-width:1100px;margin:auto}.top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}.date{font-size:14px;font-weight:650}.updated{font-size:10px;color:var(--faint)}.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.78fr);gap:12px}.card{border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);overflow:hidden}.card-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}.eyebrow{font-size:10px;color:var(--sub);letter-spacing:.1em}.title{font-size:14px;font-weight:650}.edit{border:0;background:transparent;color:var(--sub);padding:4px 0}.edit:hover{color:var(--text)}.metrics{display:grid;grid-template-columns:repeat(3,1fr)}.metric{padding:13px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:75px}.metric:nth-child(3n){border-right:0}.metric:nth-last-child(-n+3){border-bottom:0}.label{color:var(--sub);font-size:10px}.value{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:3px}.unit{font-size:10px;color:var(--sub);margin-left:3px}.weather{font-size:24px}.tasks{list-style:none;padding:0;margin:0}.task{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;border-bottom:1px solid var(--line)}.task:last-child{border-bottom:0}.check{appearance:none;width:16px;height:16px;border:1px solid var(--faint);border-radius:50%;margin:2px 0 0;flex:none;background:transparent}.check:hover{border-color:var(--accent)}.task-name{line-height:1.45}.meta{font-size:10px;color:var(--sub);margin-top:2px}.priority-high{color:#d97873}.priority-mid{color:#77a9d7}.empty{padding:24px 12px;color:var(--sub);text-align:center}.add{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line);background:var(--panel2)}input,select{border:1px solid var(--line);background:#1b1b1b;color:var(--text);border-radius:6px;padding:7px 8px;min-width:0}.add input{flex:1}.primary{border:1px solid #555;background:var(--accent);color:#222;border-radius:6px;padding:7px 10px;font-weight:650}.primary:disabled{opacity:.5}.error{display:none;margin-bottom:10px;padding:9px 11px;border:1px solid #6f3533;background:#2b2020;color:#efaaa6;border-radius:7px}.loading{opacity:.55;pointer-events:none}.modal{position:fixed;inset:0;background:#000a;display:none;place-items:center;padding:18px}.modal.open{display:grid}.dialog{width:min(480px,100%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:10px;color:var(--sub)}.field input,.field select{width:100%}.actions{display:flex;justify-content:flex-end;gap:8px}.secondary{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:6px;padding:7px 10px}.notion-link{color:var(--sub);text-decoration:none;font-size:10px}.notion-link:hover{color:var(--text)}
+    @media(max-width:680px){.shell{padding:10px}.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.metric:nth-child(3n){border-right:1px solid var(--line)}.metric:nth-child(2n){border-right:0}.metric:nth-last-child(-n+3){border-bottom:1px solid var(--line)}.metric:nth-last-child(-n+2){border-bottom:0}.form-grid{grid-template-columns:1fr}.add{flex-wrap:wrap}.add input{flex-basis:100%}}
+  </style>
+</head>
+<body>
+  <main class="shell" id="app">
+    <div class="top"><div class="date" id="today">TODAY</div><div class="updated" id="updated">読み込み中…</div></div>
+    <div class="error" id="error"></div>
+    <div class="grid">
+      <section class="card">
+        <header class="card-head"><div><div class="eyebrow">DAILY</div><div class="title">今日の記録</div></div><button class="edit" id="editDaily">編集</button></header>
+        <div class="metrics" id="metrics"></div>
+      </section>
+      <section class="card">
+        <header class="card-head"><div><div class="eyebrow">TODAY'S TODO</div><div class="title">今日のタスク</div></div><span class="updated" id="count"></span></header>
+        <ul class="tasks" id="tasks"></ul>
+        <form class="add" id="taskForm"><input id="taskName" maxlength="200" placeholder="タスクを追加" required><select id="priority" aria-label="優先度"><option>高</option><option selected>中</option><option>低</option></select><button class="primary">追加</button></form>
+      </section>
+    </div>
+  </main>
+  <div class="modal" id="dailyModal" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><form class="dialog" id="dailyForm"><div class="title" id="dialogTitle">今日の記録を編集</div><div class="form-grid">
+    <div class="field"><label>天気</label><select name="weather"><option value="">未入力</option><option>☀</option><option>☁</option><option>☔</option></select></div>
+    <div class="field"><label>体重 (kg)</label><input name="weight" type="number" step="0.1" min="0"></div>
+    <div class="field"><label>体脂肪率 (%)</label><input name="bodyFat" type="number" step="0.1" min="0" max="100"></div>
+    <div class="field"><label>血圧 上</label><input name="systolic" type="number" step="1" min="0"></div>
+    <div class="field"><label>血圧 下</label><input name="diastolic" type="number" step="1" min="0"></div>
+    <div class="field"><label>歩数</label><input name="steps" type="number" step="1" min="0"></div>
+  </div><div class="actions"><button type="button" class="secondary" id="cancelDaily">キャンセル</button><button class="primary">保存</button></div></form></div>
+  <script>
+    const state={date:'',daily:null,tasks:[]};
+    const $=s=>document.querySelector(s); const val=v=>v==null||v===''?'—':v;
+    function api(name,...args){return new Promise((resolve,reject)=>{if(window.google&&google.script&&google.script.run){google.script.run.withSuccessHandler(resolve).withFailureHandler(reject)[name](...args)}else{setTimeout(()=>resolve(mock(name,...args)),220)}})}
+    function mock(name){if(name==='getDashboard')return{ok:true,date:new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Tokyo'}),daily:{weather:'☀',weight:104.4,bodyFat:30.1,systolic:135,diastolic:91,steps:null,url:'#'},tasks:[{id:'demo',name:'大阪大学学費（後期分）準備',priority:'高',status:'実施中',url:'#'}],updatedAt:new Date().toISOString()};return{ok:true}}
+    function call(name,...args){$('#app').classList.add('loading');return api(name,...args).then(r=>{if(!r||!r.ok)throw new Error(r&&r.error||'処理に失敗しました。');hideError();return r}).catch(showError).finally(()=>$('#app').classList.remove('loading'))}
+    function showError(e){const box=$('#error');box.textContent=e&&e.message?e.message:String(e);box.style.display='block';throw e}function hideError(){$('#error').style.display='none'}
+    function render(){const d=new Date(state.date+'T00:00:00+09:00');$('#today').textContent=new Intl.DateTimeFormat('ja-JP',{month:'numeric',day:'numeric',weekday:'short'}).format(d);const x=state.daily||{};const items=[['天気',val(x.weather),'','weather'],['体重',val(x.weight),'kg'],['体脂肪率',val(x.bodyFat),'%'],['血圧',x.systolic==null&&x.diastolic==null?'—':val(x.systolic)+' / '+val(x.diastolic),'mmHg'],['歩数',val(x.steps),'歩'],['記録',x.url?'Notionで開く':'未作成','', 'link']];$('#metrics').innerHTML=items.map(i=>`<div class="metric"><div class="label">${i[0]}</div><div class="value ${i[3]==='weather'?'weather':''}">${i[3]==='link'&&x.url?`<a class="notion-link" target="_blank" rel="noopener" href="${x.url}">${i[1]}</a>`:i[1]}${i[2]?`<span class="unit">${i[2]}</span>`:''}</div></div>`).join('');$('#count').textContent=state.tasks.length+'件';$('#tasks').innerHTML=state.tasks.length?state.tasks.map(t=>`<li class="task"><input class="check" type="checkbox" data-id="${t.id}" aria-label="${escapeHtml(t.name)}を完了"><div><a class="task-name" href="${t.url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${escapeHtml(t.name)}</a><div class="meta ${t.priority==='高'?'priority-high':t.priority==='中'?'priority-mid':''}">${t.priority||'優先度なし'} · ${t.status||'未着手'}</div></div></li>`).join(''):'<li class="empty">今日のタスクはありません</li>'}
+    function escapeHtml(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+    function load(){call('getDashboard').then(r=>{state.date=r.date;state.daily=r.daily;state.tasks=r.tasks||[];$('#updated').textContent='更新 '+new Intl.DateTimeFormat('ja-JP',{hour:'2-digit',minute:'2-digit'}).format(new Date(r.updatedAt));render()}).catch(()=>{})}
+    $('#editDaily').onclick=()=>{const x=state.daily||{};for(const k of ['weather','weight','bodyFat','systolic','diastolic','steps'])$('#dailyForm').elements[k].value=x[k]??'';$('#dailyModal').classList.add('open')};$('#cancelDaily').onclick=()=>$('#dailyModal').classList.remove('open');
+    $('#dailyForm').onsubmit=e=>{e.preventDefault();const f=new FormData(e.currentTarget),payload={date:state.date};for(const k of ['weather','weight','bodyFat','systolic','diastolic','steps'])payload[k]=f.get(k);call('saveDaily',payload).then(r=>{state.daily=r.daily;$('#dailyModal').classList.remove('open');render()}).catch(()=>{})};
+    $('#taskForm').onsubmit=e=>{e.preventDefault();const input=$('#taskName'),name=input.value.trim();if(!name)return;call('addTask',{name,date:state.date,priority:$('#priority').value}).then(r=>{state.tasks.push(r.task);input.value='';render()}).catch(()=>{})};
+    $('#tasks').onchange=e=>{if(!e.target.matches('.check'))return;const id=e.target.dataset.id;e.target.disabled=true;call('setTaskCompleted',id,true).then(()=>{state.tasks=state.tasks.filter(t=>t.id!==id);render()}).catch(()=>{e.target.checked=false;e.target.disabled=false})};
+    load();
+  </script>
+</body>
+</html>
