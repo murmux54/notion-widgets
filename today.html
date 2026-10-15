@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://script.google.com https://script.googleusercontent.com; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Today</title>
+  <style>
+    :root{color-scheme:dark;--bg:#191919;--panel:#202020;--panel2:#252525;--text:#dfdedb;--sub:#9b9a97;--faint:#6f6e6b;--line:#323232;--accent:#e8e7e4;--danger:#efaaa6;--danger-bg:#2b2020;--radius:10px}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;font-size:13px}button,input,select{font:inherit}button{cursor:pointer}.shell{padding:12px 14px 18px;max-width:1100px;margin:auto}.top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}.date{font-size:14px;font-weight:650}.updated{font-size:10px;color:var(--faint)}.top-actions{display:flex;align-items:center;gap:10px}.quiet{border:0;background:transparent;color:var(--faint);font-size:10px;padding:2px}.quiet:hover{color:var(--text)}.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.78fr);gap:12px}.card{border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);overflow:hidden}.card-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}.eyebrow{font-size:10px;color:var(--sub);letter-spacing:.1em}.title{font-size:14px;font-weight:650}.edit{border:0;background:transparent;color:var(--sub);padding:4px 0}.edit:hover{color:var(--text)}.metrics{display:grid;grid-template-columns:repeat(3,1fr)}.metric{padding:13px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:75px}.metric:nth-child(3n){border-right:0}.metric:nth-last-child(-n+3){border-bottom:0}.label{color:var(--sub);font-size:10px}.value{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:3px}.unit{font-size:10px;color:var(--sub);margin-left:3px}.weather{font-size:24px}.notion-link{color:var(--sub);text-decoration:none;font-size:10px}.notion-link:hover{color:var(--text)}.tasks{list-style:none;padding:0;margin:0}.task{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;border-bottom:1px solid var(--line)}.task:last-child{border-bottom:0}.check{appearance:none;width:16px;height:16px;border:1px solid var(--faint);border-radius:50%;margin:2px 0 0;flex:none;background:transparent}.check:hover{border-color:var(--accent)}.task-name{line-height:1.45;color:inherit;text-decoration:none}.meta{font-size:10px;color:var(--sub);margin-top:2px}.priority-high{color:#d97873}.priority-mid{color:#77a9d7}.empty{padding:24px 12px;color:var(--sub);text-align:center}.add{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line);background:var(--panel2)}input,select{border:1px solid var(--line);background:#1b1b1b;color:var(--text);border-radius:6px;padding:7px 8px;min-width:0}.add input{flex:1}.primary{border:1px solid #555;background:var(--accent);color:#222;border-radius:6px;padding:7px 10px;font-weight:650}.primary:disabled{opacity:.5}.error{display:none;margin-bottom:10px;padding:9px 11px;border:1px solid #6f3533;background:var(--danger-bg);color:var(--danger);border-radius:7px}.loading{opacity:.55;pointer-events:none}.modal,.gate{position:fixed;inset:0;background:#000a;display:none;place-items:center;padding:18px;z-index:10}.modal.open,.gate.open{display:grid}.dialog{width:min(480px,100%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:0 16px 50px #0008}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:10px;color:var(--sub)}.field input,.field select{width:100%}.actions{display:flex;justify-content:flex-end;gap:8px}.secondary{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:6px;padding:7px 10px}.gate-copy{color:var(--sub);line-height:1.6;margin:8px 0 14px}.gate-form{display:flex;flex-direction:column;gap:10px}.remember{display:flex;align-items:center;gap:7px;color:var(--sub);font-size:11px}.remember input{width:auto}.gate-error{min-height:1.4em;color:var(--danger);font-size:11px}.noscript{padding:20px;color:var(--danger)}
+    @media(max-width:680px){.shell{padding:10px}.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.metric:nth-child(3n){border-right:1px solid var(--line)}.metric:nth-child(2n){border-right:0}.metric:nth-last-child(-n+3){border-bottom:1px solid var(--line)}.metric:nth-last-child(-n+2){border-bottom:0}.form-grid{grid-template-columns:1fr}.add{flex-wrap:wrap}.add input{flex-basis:100%}}
+  </style>
+</head>
+<body>
+  <noscript><div class="noscript">このウィジェットにはJavaScriptが必要です。</div></noscript>
+  <main class="shell" id="app" hidden>
+    <div class="top"><div class="date" id="today">TODAY</div><div class="top-actions"><span class="updated" id="updated">読み込み中…</span><button class="quiet" id="changeKey" type="button">キー変更</button></div></div>
+    <div class="error" id="error" role="alert"></div>
+    <div class="grid">
+      <section class="card">
+        <header class="card-head"><div><div class="eyebrow">DAILY</div><div class="title">今日の記録</div></div><button class="edit" id="editDaily" type="button">編集</button></header>
+        <div class="metrics" id="metrics"></div>
+      </section>
+      <section class="card">
+        <header class="card-head"><div><div class="eyebrow">TODAY'S TODO</div><div class="title">今日のタスク</div></div><span class="updated" id="count"></span></header>
+        <ul class="tasks" id="tasks"></ul>
+        <form class="add" id="taskForm"><input id="taskName" maxlength="200" placeholder="タスクを追加" autocomplete="off" required><select id="priority" aria-label="優先度"><option>高</option><option selected>中</option><option>低</option></select><button class="primary">追加</button></form>
+      </section>
+    </div>
+  </main>
+
+  <div class="gate open" id="authGate">
+    <form class="dialog gate-form" id="authForm">
+      <div class="title">ウィジェットを開く</div>
+      <div class="gate-copy">GASのスクリプト プロパティに設定したアクセスキーを入力してください。キーはGitHubには保存されません。</div>
+      <div class="field"><label for="accessKey">アクセスキー</label><input id="accessKey" type="password" minlength="32" autocomplete="off" required></div>
+      <label class="remember"><input id="rememberKey" type="checkbox" checked>この端末に保存する</label>
+      <div class="gate-error" id="authError" role="alert"></div>
+      <button class="primary" id="authSubmit">接続</button>
+    </form>
+  </div>
+
+  <div class="modal" id="dailyModal" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <form class="dialog" id="dailyForm"><div class="title" id="dialogTitle">今日の記録を編集</div><div class="form-grid">
+      <div class="field"><label>天気</label><select name="weather"><option value="">未入力</option><option>☀</option><option>☁</option><option>☔</option></select></div>
+      <div class="field"><label>体重 (kg)</label><input name="weight" type="number" step="0.1" min="20" max="400"></div>
+      <div class="field"><label>体脂肪率 (%)</label><input name="bodyFat" type="number" step="0.1" min="0" max="100"></div>
+      <div class="field"><label>血圧 上</label><input name="systolic" type="number" step="1" min="50" max="300"></div>
+      <div class="field"><label>血圧 下</label><input name="diastolic" type="number" step="1" min="30" max="200"></div>
+      <div class="field"><label>歩数</label><input name="steps" type="number" step="1" min="0" max="500000"></div>
+    </div><div class="actions"><button type="button" class="secondary" id="cancelDaily">キャンセル</button><button class="primary">保存</button></div></form>
+  </div>
+
+  <script>
+    'use strict';
+    const API_URL='https://script.google.com/macros/s/AKfycby9evkpysGi7Xy1VmT-2PkPsZGc5pmGN3WCqKotZBngSCyVlSHNTCDFgBwszZy68rG7Ug/exec';
+    const TOKEN_KEY='notionHomeWidget.accessKey.v1';
+    const state={token:'',date:'',daily:null,tasks:[]};
+    const $=selector=>document.querySelector(selector);
+
+    async function api(action,payload={},token=state.token){
+      let response;
+      try{
+        response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action,token,payload}),redirect:'follow',cache:'no-store',credentials:'omit'});
+      }catch(_){throw apiError('NETWORK','GAS APIに接続できません。デプロイ設定を確認してください。')}
+      if(!response.ok)throw apiError('HTTP','GAS APIからエラーが返されました ('+response.status+')。');
+      let result;
+      try{result=await response.json()}catch(_){throw apiError('RESPONSE','GAS APIの応答を読み取れませんでした。')}
+      if(!result||!result.ok)throw apiError(result&&result.code||'API',result&&result.error||'処理に失敗しました。');
+      return result;
+    }
+
+    function apiError(code,message){const error=new Error(message);error.code=code;return error}
+    function setBusy(busy){$('#app').classList.toggle('loading',busy)}
+    function showError(error){const box=$('#error');box.textContent=error&&error.message?error.message:String(error);box.style.display='block'}
+    function hideError(){$('#error').style.display='none'}
+    function handleError(error){setBusy(false);if(error&&error.code==='UNAUTHORIZED'){forgetKey();openAuth(error.message)}else{showError(error)}}
+    function savedKey(){return localStorage.getItem(TOKEN_KEY)||sessionStorage.getItem(TOKEN_KEY)||''}
+    function rememberKey(token,persistent){forgetKey();(persistent?localStorage:sessionStorage).setItem(TOKEN_KEY,token)}
+    function forgetKey(){localStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(TOKEN_KEY);state.token=''}
+
+    function openAuth(message=''){$('#app').hidden=true;$('#authGate').classList.add('open');$('#authError').textContent=message;$('#accessKey').value='';setTimeout(()=>$('#accessKey').focus(),0)}
+    function closeAuth(){$('#authGate').classList.remove('open');$('#app').hidden=false;$('#authError').textContent=''}
+
+    async function loadDashboard(token=state.token){
+      setBusy(true);hideError();
+      try{const result=await api('dashboard',{},token);state.token=token;state.date=result.date;state.daily=result.daily;state.tasks=result.tasks||[];render(result.updatedAt);return result}
+      finally{setBusy(false)}
+    }
+
+    function render(updatedAt){
+      const date=new Date(state.date+'T00:00:00+09:00');
+      $('#today').textContent=new Intl.DateTimeFormat('ja-JP',{month:'numeric',day:'numeric',weekday:'short',timeZone:'Asia/Tokyo'}).format(date);
+      $('#updated').textContent='更新 '+new Intl.DateTimeFormat('ja-JP',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Tokyo'}).format(new Date(updatedAt));
+      renderMetrics();renderTasks();
+    }
+
+    function renderMetrics(){
+      const daily=state.daily||{};
+      const blood=daily.systolic==null&&daily.diastolic==null?'—':display(daily.systolic)+' / '+display(daily.diastolic);
+      const items=[
+        {label:'天気',value:display(daily.weather),kind:'weather'},
+        {label:'体重',value:display(daily.weight),unit:'kg'},
+        {label:'体脂肪率',value:display(daily.bodyFat),unit:'%'},
+        {label:'血圧',value:blood,unit:'mmHg'},
+        {label:'歩数',value:display(daily.steps),unit:'歩'},
+        {label:'記録',value:daily.url?'Notionで開く':'未作成',kind:'link',url:safeNotionUrl(daily.url)},
+      ];
+      const root=$('#metrics');root.replaceChildren();
+      items.forEach(item=>{
+        const metric=document.createElement('div');metric.className='metric';
+        const label=document.createElement('div');label.className='label';label.textContent=item.label;
+        const value=document.createElement('div');value.className='value'+(item.kind==='weather'?' weather':'');
+        if(item.kind==='link'&&item.url){const link=document.createElement('a');link.className='notion-link';link.target='_blank';link.rel='noopener noreferrer';link.href=item.url;link.textContent=item.value;value.append(link)}
+        else{value.append(document.createTextNode(item.value));if(item.unit){const unit=document.createElement('span');unit.className='unit';unit.textContent=item.unit;value.append(unit)}}
+        metric.append(label,value);root.append(metric);
+      });
+    }
+
+    function renderTasks(){
+      $('#count').textContent=state.tasks.length+'件';
+      const root=$('#tasks');root.replaceChildren();
+      if(!state.tasks.length){const empty=document.createElement('li');empty.className='empty';empty.textContent='今日のタスクはありません';root.append(empty);return}
+      state.tasks.forEach(task=>{
+        const row=document.createElement('li');row.className='task';
+        const check=document.createElement('input');check.className='check';check.type='checkbox';check.dataset.id=task.id;check.setAttribute('aria-label',(task.name||'タスク')+'を完了');
+        const body=document.createElement('div');
+        const url=safeNotionUrl(task.url);
+        const name=url?document.createElement('a'):document.createElement('span');name.className='task-name';name.textContent=task.name||'名称未設定';if(url){name.href=url;name.target='_blank';name.rel='noopener noreferrer'}
+        const meta=document.createElement('div');meta.className='meta '+(task.priority==='高'?'priority-high':task.priority==='中'?'priority-mid':'');meta.textContent=(task.priority||'優先度なし')+' · '+(task.status||'未着手');
+        body.append(name,meta);row.append(check,body);root.append(row);
+      });
+    }
+
+    function display(value){return value==null||value===''?'—':String(value)}
+    function safeNotionUrl(value){try{const url=new URL(value);return url.protocol==='https:'&&(url.hostname==='notion.so'||url.hostname.endsWith('.notion.so'))?url.href:''}catch(_){return''}}
+
+    $('#authForm').addEventListener('submit',async event=>{
+      event.preventDefault();const token=$('#accessKey').value.trim();const button=$('#authSubmit');button.disabled=true;$('#authError').textContent='接続中…';
+      try{await loadDashboard(token);rememberKey(token,$('#rememberKey').checked);closeAuth()}
+      catch(error){forgetKey();$('#authError').textContent=error.message}
+      finally{button.disabled=false}
+    });
+
+    $('#changeKey').addEventListener('click',()=>{forgetKey();openAuth()});
+    $('#editDaily').addEventListener('click',()=>{const daily=state.daily||{};['weather','weight','bodyFat','systolic','diastolic','steps'].forEach(key=>{$('#dailyForm').elements[key].value=daily[key]??''});$('#dailyModal').classList.add('open')});
+    $('#cancelDaily').addEventListener('click',()=>$('#dailyModal').classList.remove('open'));
+    $('#dailyModal').addEventListener('click',event=>{if(event.target===$('#dailyModal'))$('#dailyModal').classList.remove('open')});
+
+    $('#dailyForm').addEventListener('submit',async event=>{
+      event.preventDefault();const form=new FormData(event.currentTarget);const payload={};['weather','weight','bodyFat','systolic','diastolic','steps'].forEach(key=>{payload[key]=form.get(key)});setBusy(true);hideError();
+      try{const result=await api('saveDaily',payload);state.daily=result.daily;$('#dailyModal').classList.remove('open');renderMetrics()}
+      catch(error){handleError(error)}finally{setBusy(false)}
+    });
+
+    $('#taskForm').addEventListener('submit',async event=>{
+      event.preventDefault();const input=$('#taskName');const name=input.value.trim();if(!name)return;setBusy(true);hideError();
+      try{const result=await api('addTask',{name,priority:$('#priority').value});state.tasks.push(result.task);input.value='';renderTasks()}
+      catch(error){handleError(error)}finally{setBusy(false)}
+    });
+
+    $('#tasks').addEventListener('change',async event=>{
+      if(!event.target.matches('.check'))return;const check=event.target;const pageId=check.dataset.id;check.disabled=true;setBusy(true);hideError();
+      try{await api('completeTask',{pageId});state.tasks=state.tasks.filter(task=>task.id!==pageId);renderTasks()}
+      catch(error){check.checked=false;check.disabled=false;handleError(error)}finally{setBusy(false)}
+    });
+
+    (async function start(){const token=savedKey();if(!token){openAuth();return}try{await loadDashboard(token);closeAuth()}catch(error){handleError(error)}})();
+  </script>
+</body>
+</html>
